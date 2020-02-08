@@ -1,6 +1,14 @@
+import cv2
 
 
 class Collector:
     """
-    Load Model and 
+    Class...
     """
+    def __init__(self):
+        """
+        Initialize frame rate calculation.
+        """
+        self.frame_rate_calc = 1
+        self.freq = cv2.getTickFrequency()
+        self.font = cv2.FONT_HERSHEY_SIMPLEX
