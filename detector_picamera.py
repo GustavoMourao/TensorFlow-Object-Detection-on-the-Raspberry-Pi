@@ -5,8 +5,7 @@ import cv2
 import numpy as np
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-from utils import label_map_util
-from utils import visualization_utils as vis_util
+import sys
 
 if __name__ == "__main__":
     """
@@ -24,6 +23,12 @@ if __name__ == "__main__":
     Next step aims to cover the same implementation based on
     Openvino framework.
     """
+
+    sys.path.append('..')
+
+    from utils import label_map_util
+    from utils import visualization_utils as vis_util
+
     # Set up camera constants.
     # IM_WIDTH = 1280
     # IM_HEIGHT = 720
@@ -133,7 +138,7 @@ if __name__ == "__main__":
             feed_dict={image_tensor: frame_expanded}
         )
 
-        # Draw the results of the detection (aka 'visulaize the results')
+        # Draw the results of the detection (aka 'visulaize the results').
         vis_util.visualize_boxes_and_labels_on_image_array(
             frame,
             np.squeeze(boxes),
@@ -157,16 +162,17 @@ if __name__ == "__main__":
 
         # All the results have been drawn on the frame
         # so it's time to display it.
-        cv2.imshow('Object detector', frame)
+        print('Identying frame..')
+        cv2.imwrite(
+            "image_detected.jpg",
+            frame
+        )
 
         t2 = cv2.getTickCount()
         time1 = (t2-t1)/freq
         frame_rate_calc = 1/time1
 
-        # Press 'q' to quit
-        if cv2.waitKey(1) == ord('q'):
-            break
-
         rawCapture.truncate(0)
 
     camera.close()
+    cv2.destroyAllWindows()
