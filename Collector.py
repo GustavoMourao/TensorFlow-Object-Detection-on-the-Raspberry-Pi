@@ -3,7 +3,7 @@ import cv2
 
 class Collector:
     """
-    Class...
+    Class that manipulates opencv objects (raw image).
     """
     def __init__(self):
         """
