@@ -30,10 +30,8 @@ if __name__ == "__main__":
     from utils import visualization_utils as vis_util
 
     # Set up camera constants.
-    # IM_WIDTH = 1280
-    # IM_HEIGHT = 720
-    IM_WIDTH = 640
-    IM_HEIGHT = 480
+    IM_WIDTH = 400
+    IM_HEIGHT = 400
 
     # Name of the directory containing the object detection module we're using.
     # In this case, the model used is Single Shot MultiBox Detector (SSD).
@@ -44,6 +42,7 @@ if __name__ == "__main__":
     MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09'
 
     # Grab path to current working directory.
+    print(os.getcwd())
     CWD_PATH = os.getcwd()
 
     # Path to frozen detection graph .pb file, which contains
@@ -138,7 +137,7 @@ if __name__ == "__main__":
             feed_dict={image_tensor: frame_expanded}
         )
 
-        # Draw the results of the detection (aka 'visulaize the results').
+        # Draw the results of the detection (aka 'visulaize the results')
         vis_util.visualize_boxes_and_labels_on_image_array(
             frame,
             np.squeeze(boxes),
@@ -162,11 +161,18 @@ if __name__ == "__main__":
 
         # All the results have been drawn on the frame
         # so it's time to display it.
-        print('Identying frame..')
-        cv2.imwrite(
-            "image_detected.jpg",
-            frame
+        print('Categories Identified:')
+        print(
+            [category_index.get(value) for index,value \
+                in enumerate(classes[0]) if scores[0, index] > 0.5]
         )
+        print(num)
+
+        if (num >= 1):
+            cv2.imwrite(
+                "image_detected.jpg",
+                frame
+            )
 
         t2 = cv2.getTickCount()
         time1 = (t2-t1)/freq
@@ -175,4 +181,3 @@ if __name__ == "__main__":
         rawCapture.truncate(0)
 
     camera.close()
-    cv2.destroyAllWindows()
