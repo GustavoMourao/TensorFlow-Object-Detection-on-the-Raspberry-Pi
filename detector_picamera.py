@@ -179,5 +179,3 @@ if __name__ == "__main__":
         frame_rate_calc = 1/time1
 
         rawCapture.truncate(0)
-
-    camera.close()
