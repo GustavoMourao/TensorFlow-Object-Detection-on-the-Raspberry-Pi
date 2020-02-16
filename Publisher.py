@@ -1,5 +1,6 @@
 from twilio.rest import Client
 import os
+from dotenv import Dotenv
 
 
 class Publisher:
@@ -13,12 +14,23 @@ class Publisher:
         and the Twilio phone number
         are stored as environment variables on my Pi
         """
-        self.account_sid = os.environ['TWILIO_ACCOUNT_SID']
-        self.auth_token = os.environ['TWILIO_AUTH_TOKEN']
-        self.my_number = os.environ['MY_DIGITS']
-        self.twilio_number = os.environ['TWILIO_DIGITS']
+        dotenv = Dotenv('.env')
+        self.account_sid = dotenv['TWILIO_ACCOUNT_SID']
+        self.auth_token = dotenv['TWILIO_AUTH_TOKEN']
+        self.my_number = dotenv['MY_DIGITS']
+        self.twilio_number = dotenv['TWILIO_DIGITS']
 
         self.client = Client(
             self.account_sid,
             self.auth_token
+        )
+
+    def send_person_detection(self):
+        """
+        Send person detection status
+        """
+        self.client.messages.create(
+            body='New person detected!',
+            from_=self.twilio_number,
+            to=self.my_number
         )

@@ -1,6 +1,7 @@
 import os
 from Inference import Inference
 from Collector import Collector
+from Publisher import Publisher
 import cv2
 import numpy as np
 from picamera.array import PiRGBArray
@@ -108,6 +109,9 @@ if __name__ == "__main__":
     freq = collector.freq
     font = collector.font
 
+    # Initialize publisher service.
+    publisher = Publisher()
+
     for frame1 in camera.capture_continuous(
         rawCapture,
         format="bgr",
@@ -168,11 +172,15 @@ if __name__ == "__main__":
         )
         print(num)
 
-        if (num >= 1):
-            cv2.imwrite(
-                "image_detected.jpg",
-                frame
-            )
+        # # Save screen shot in case of finded class.
+        # if (num >= 1):
+        #     cv2.imwrite(
+        #         "image_detected.jpg",
+        #         frame
+        #     )
+
+        if (int(classes[0][0]) == 1):
+            publisher.send_person_detection()
 
         t2 = cv2.getTickCount()
         time1 = (t2-t1)/freq
